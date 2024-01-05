@@ -1,23 +1,23 @@
-import axios from "axios";
+import { Configuration, OpenAIApi } from "openai";
 
 export const ChatGPTResponse = async (messages) => {
-  try {
-    const response = await axios.post(
-      "https://iogpt-api-management-service.azure-api.net/openai/api/proxy/openai/chat/completions",
-      {
-        model: "gpt-35-turbo",
-        messages,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "iO-GPT-Subscription-Key": process.env.CHATGPT_API_KEY,
-        },
-      }
-    );
+  const configuration = new Configuration({
+    apiKey: process.env.CHATGPT_API_KEY,
+  });
 
-    console.log("ChatGPTResponse", response.data.choices[0].message.content);
-    return response.data.choices[0].message.content;
+  const openai = new OpenAIApi(configuration);
+
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: messages,
+      n: 1,
+      stream: false,
+    });
+    console.log("chatbox answer", completion);
+    const response = completion.data.choices[0].message;
+
+    return response?.content;
   } catch (error) {
     console.error(`chatGPT failed to generate response `, error);
     return "";
