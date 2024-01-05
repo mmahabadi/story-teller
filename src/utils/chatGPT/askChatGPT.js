@@ -1,7 +1,7 @@
 import { PromptType, Prompts } from "./constants";
 import axios from "axios";
 
-const CHATGPT_API_KEY = "8e7aa471904840359e1d01e31e555318";
+const CHATGPT_API_KEY = "357a42b6f73d488897484e18a76a6d73";
 
 export const ChatGPTResponse = async (messages) => {
   try {
