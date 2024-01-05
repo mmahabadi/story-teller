@@ -1,26 +1,43 @@
 import StoryContext from "../../context/storyContext";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { fetchSpeechAudio } from "../../utils/chatGPT/askChatGPT.js";
 
 const StoryBody = () => {
-  const { story, setStory } = useContext(StoryContext);
+  const { story, setStory, setLoading } = useContext(StoryContext);
+  
+  const [audio, setAudio] = useState(null);
+
+
+  const playAudio = async() => {
+  
+    setLoading(true);
+    const audio = await fetchSpeechAudio(story.body);
+    setAudio(audio);
+    setLoading(false);
+    console.log("my audio",audio);
+    
+  }
+  useEffect(() => {
+    if (story?.body) {
+      playAudio();
+    }
+  }, [story?.body]);
+
 
   return (
     <>
       <div className="p-10">
-        {story?.history && (
+        {story?.body && (
           <div className="text-grey-800 dark:text-grey-200">
-            {story?.body &&
-              story?.history?.map((item) => {
-                return (
-                  <p
-                    className={`p-5 mt-5 rounded-lg   ${
-                      item.role === "user" ? "bg-transparent" : "bg-white"
-                    }`}
-                  >
-                    {item.role}:{JSON.parse(item.content).body}
-                  </p>
-                );
-              })}
+            <p
+              className="p-5 mt-5 rounded-lg bg-white"
+            >
+              {story?.body}
+            </p>
+          <br></br>
+            {audio &&
+             <audio id="audioBlob" src={audio} controls type="audio/mp3" autoplay="true" />
+             }
 
             {story?.endings && story?.endings?.length > 0 && (
               <>

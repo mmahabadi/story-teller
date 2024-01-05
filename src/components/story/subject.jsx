@@ -6,7 +6,7 @@ import { storyTeller } from "../../utils/chatGPT/storyTeller";
 import { PromptType } from "../../utils/chatGPT/constants";
 
 const Subject = () => {
-  const { story, setStory } = useContext(StoryContext);
+  const { story, setStory, setLoading } = useContext(StoryContext);
   const [title, setTitle] = useState("");
 
   return (
@@ -30,14 +30,16 @@ const Subject = () => {
       <button
         className="w-96 rounded-lg  ml-2 pl-10 pr-10rounded-lg bg-amber-500 text-white font-semibold px-4 py-2  hover:bg-amber-600 transition duration-300 ease-in-out"
         onClick={async (e) => {
-          setStory({ ...story, loading: true });
+          setStory({ ...story});
+          setLoading(true);
           console.log(story);
           let updatedStory = await storyTeller(
             PromptType.STORY_CHARACTERS_PROMPT,
             story
           );
           //console.log(characters);
-          setStory({ ...updatedStory, loading: false });
+          setStory({ ...updatedStory});
+          setLoading(false);
         }}
       >
         Let's Go

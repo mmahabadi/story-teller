@@ -4,7 +4,7 @@ import { storyTeller } from "../../utils/chatGPT/storyTeller";
 import { PromptType } from "../../utils/chatGPT/constants";
 const Characters = () => {
   //Todo: add charachter customazation here=>> give a description of the character from kid and add to character list
-  const { story, setStory } = useContext(StoryContext);
+  const { story, setStory, setLoading } = useContext(StoryContext);
 
   const charIsSelected = (char) => {
     return story?.characters.find((x) => x.name === char).selected;
@@ -56,11 +56,13 @@ const Characters = () => {
               className="w-full mt-10 h-16 p-5 rounded-lg bg-amber-500 text-white font-semibold px-4 py-2  hover:bg-amber-600 transition duration-300 ease-in-out"
               onClick={async () => {
                 console.log(story);
+                setLoading(true);
                 let updatedStory = await storyTeller(
                   PromptType.STORY_OBJECT_PROMPT,
                   story
                 );
                 setStory({ ...updatedStory });
+                setLoading(false);
               }}
             >
               I love these characters

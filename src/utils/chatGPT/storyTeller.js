@@ -10,12 +10,12 @@ export const storyTeller = async (promptType, story) => {
   let updatedStory = { ...story, history: messages };
   if (response) {
     const result = JSON.parse(response);
-    console.log("json-result", result);
+    console.log("json-result", result.characters);
     if (promptType === PromptType.STORY_CHARACTERS_PROMPT) {
       updatedStory.characters = result;
-    } else if (promptType === promptType.STORY_OBJECT_PROMPT) {
-      updatedStory.endings.push(result.endings);
-      updatedStory.body += " " + result.body;
+    } else if (promptType === PromptType.STORY_OBJECT_PROMPT) {
+      updatedStory.endings = result.endings || result.story?.endings;
+      updatedStory.body += " " + (result.body || result.story?.body);
     }
 
     updatedStory.history.push({

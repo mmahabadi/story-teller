@@ -1,6 +1,8 @@
 import { createContext } from "react";
 
 const StoryContext = createContext({
+  loading: false,
+  setLoading: () => {},
   story: {
     subject: "",
     characters: [],
